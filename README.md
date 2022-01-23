@@ -1,7 +1,7 @@
 # MangoHire
 BoilerMake Hackathon
 
-There are still biases against minorities when it comes to the hiring world. According to HBR, “Since 1990 white applicants received, on average, 36% more callbacks than black applicants and 24% more callbacks than Latino applicants with identical résumés.” People shouldn’t miss out on job opportunities because of the way they look or sound.
+There are still biases against minorities when it comes to hiring. People shouldn’t miss out on job opportunities because of the way they look or sound.
 
 Everybody has some sort of bias, when they hear or see certain people. But what if the recruiters and interviewers couldn’t see, hear or identify the participants? We built an interview system that eliminates most biases in the hiring process, and the candidates’ identities are only revealed towards the end of the hiring process. 
 
