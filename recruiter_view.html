@@ -1,0 +1,111 @@
+<html>
+<head>
+<title>firebase editable table </title>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+  <button type="submit" id="getData" class="btn btn-primary">Display Applicants</button>
+
+<div class="col-md-6">
+<table class="table table-striped" id='dataTbl'>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Education</th>
+      <th scope="col">Experience</th>
+      <th scope="col">Skills</th>
+      <th scope="col">Application Status</th>
+    </tr>
+  </thead>
+</table>
+</div>
+<div class="col-md-6">
+  <form>
+    <div class="form-group">
+    <label>Applicant Number</label>
+    <input type="text" class="form-control" id="number" placeholder="Applicant Number">
+  </div>
+  <div class="form-group">
+  <label>Accept/Reject</label>
+  <input type="text" class="form-control" id="accept_reject" placeholder="Accept/Reject">
+</div>
+  <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
+  import { getDatabase, set, ref ,push, child, onValue} from "https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js";
+
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBX36S-WMY5vioCt_7dNiFxF7iiwY_TgXs",
+    authDomain: "temp-81b88.firebaseapp.com",
+    databaseURL: "https://temp-81b88-default-rtdb.firebaseio.com",
+    projectId: "temp-81b88",
+    storageBucket: "temp-81b88.appspot.com",
+    messagingSenderId: "899494313913",
+    appId: "1:899494313913:web:402b9e84eb834f0bff0068",
+    measurementId: "G-83S3R01M11"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  // Get a reference to the database service
+  const database = getDatabase(app);
+
+  // write data
+  submit.addEventListener('click',(e) => {
+    var number = document.getElementById('number').value;
+    var accept_reject = document.getElementById('accept_reject').value;
+
+    const userId = push(child(ref(database), 'recruit_test')).key;
+
+    set(ref(database, 'recruit_test/' + userId), {
+    number: number,
+    accept_reject: accept_reject
+   });
+   alert('saved');
+  });
+
+  // read data
+  getData.addEventListener('click',(e) => {
+
+    $('#dataTbl td').remove();
+    var rowNum = 0;
+    const dbRef = ref(database, 'recruit_test/');
+
+    onValue(dbRef, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+      const childKey = childSnapshot.key;
+      const childData = childSnapshot.val();
+      // ...
+      rowNum += 1;
+      var row = "<tr><td>" + rowNum  + "</td><td>" + childData.education + "</td><td>" + childData.experience + "</td><td>" + childData.skills + "</td><td>"
+      + childData.appStatus + "</td><tr>"
+
+      $(row).appendTo('#dataTbl');
+
+      });
+    }, {
+       onlyOnce: true
+    });
+
+
+  });
+  </script>
