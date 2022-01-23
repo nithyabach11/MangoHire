@@ -20,6 +20,10 @@
   <input type="text" class="form-control" id="phone" placeholder="Phone">
 </div>
     <div class="form-group">
+    <label>Email</label>
+    <input type="email" class="form-control" id="email" placeholder="Email">
+  </div>
+    <div class="form-group">
     <label>Education</label>
     <input type="text" class="form-control" id="education" placeholder="Education">
   </div>
@@ -43,10 +47,7 @@
     <label>Veteran Status</label>
     <input type="text" class="form-control" id="status"placeholder="Veteran Status">
   </div>
-  <div class="form-group">
-    <label>Email</label>
-    <input type="email" class="form-control" id="email" placeholder="Email">
-  </div>
+  
   <button type="submit" id="submit" class="btn btn-primary">Submit</button>
 </form>
 </div>
@@ -85,13 +86,14 @@
   submit.addEventListener('click',(e) => {
     var name = document.getElementById('name').value;
     var phone = document.getElementById('phone').value;
+    var email = document.getElementById('email').value;
     var education = document.getElementById('education').value;
     var experience = document.getElementById('experience').value;
     var skills = document.getElementById('skills').value;
     var ethnicity = document.getElementById('ethnicity').value;
     var gender = document.getElementById('gender').value;
     var status = document.getElementById('status').value;
-    var email = document.getElementById('email').value;
+   
     var appStatus = "Pending";
 
     const userId = push(child(ref(database), 'recruit_test')).key;
