@@ -8,34 +8,34 @@
 </head>
 
 <body>
-
-  <button type="submit" id="getData" class="btn btn-primary">Display Applicants</button>
-
 <div class="col-md-6">
-<table class="table table-striped" id='dataTbl'>
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Education</th>
-      <th scope="col">Experience</th>
-      <th scope="col">Skills</th>
-      <th scope="col">Application Status</th>
-    </tr>
-  </thead>
-</table>
+  <form>
+    <div class="form-group">
+    <label>Applicant Number</label>
+    <input type="text" class="form-control" id="number" placeholder="Applicant Number">
+  </div>
+  <div class="form-group">
 </div>
-<div class="col-md-6">
-<a href="send_email.html">
-<button type="submit" class="btn btn-primary">Email One Applicant</button>
-</a>
+</form>
+<button type="submit" id="getData" class="btn btn-primary">Get Email</button>
 </div>
-
+<form action="https://getform.io/f/86ea4356-6546-4318-b888-7db6a4cc076a" method="POST">
+  <label>Email Address:</label>
+<input type="email" name="email">
+<!-- radio button handle -->
+<label>Accepted</label>
+<input type="radio" name="status" value="accepted" checked>
+<label>Rejected</label>
+<input type="radio" name="status" value="rejected">
+<button type="submit" class="btn btn-primary">Send</button>
+</form>
 </body>
 </html>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 
 <script type="module">
+  var appnumber = 0;
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
   import { getDatabase, set, ref ,push, child, onValue} from "https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js";
@@ -61,24 +61,28 @@
   // Get a reference to the database service
   const database = getDatabase(app);
 
+  function getID() {
+    appnumber = document.getElementById('number').value;
+  }
 
   // read data
   getData.addEventListener('click',(e) => {
-
+    getID();
     $('#dataTbl td').remove();
     var rowNum = 0;
+    var applicantEmail = "";
     const dbRef = ref(database, 'demo/');
-
     onValue(dbRef, (snapshot) => {
       snapshot.forEach((childSnapshot) => {
       const childKey = childSnapshot.key;
       const childData = childSnapshot.val();
       // ...
+      if (rowNum == (appnumber - 1)) {
+        applicantEmail = (childData.email);
+        window.alert(applicantEmail);
+      }
       rowNum += 1;
-      var row = "<tr><td>" + rowNum  + "</td><td>" + childData.education + "</td><td>" + childData.experience + "</td><td>" + childData.skills + "</td><td>"
-      + childData.appStatus + "</td><tr>"
 
-      $(row).appendTo('#dataTbl');
 
       });
     }, {

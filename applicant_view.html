@@ -1,0 +1,156 @@
+<html>
+<head>
+<title>firebase editable table </title>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+<div class="col-md-6">
+  <form>
+    <div class="form-group">
+    <div class="form-group"></div><span  class="form-group">Personal Information (will not be disclosed to recruiter)</span>
+  <div class="form-group"></div>
+  <div class="form-group"></div>
+    <label>Full Legal Name</label>
+    <input type="text" class="form-control" id="name" placeholder="First Last">
+  </div>
+  <div class="form-group">
+  <label>Phone</label>
+  <input type="text" class="form-control" id="phone" placeholder="(XXX)-XXX-XXXX">
+</div>
+    <div class="form-group">
+    <label>Email</label>
+    <input type="email" class="form-control" id="email" placeholder="example@example.com">
+  </div>
+    <div class="form-group"></div>
+  <div class="form-group">
+    <div class="form-group"></div><span  class="form-group">Resume</span>
+  </div>
+    <div class="form-group">
+    <label>Education</label>
+    <input type="text" class="form-control" id="education" placeholder="Education">
+  </div>
+  <div class="form-group">
+    <label>Experience</label>
+    <input type="text" class="form-control" id="experience"placeholder="Experience">
+  </div>
+  <div class="form-group">
+    <label>Skills</label>
+    <input type="text" class="form-control" id="skills"placeholder="Skills(comma separated)">
+  </div>
+    <div class="form-group">
+    <div class="form-group"></div><span  class="form-group">Voluntary Self Identification (will not be disclosed to recruiter)</span>
+  </div>
+  <div class="form-group"></div>
+  <div class="form-group"></div>
+  <div class="form-group">
+    <label>Ethnicity</label>
+    <input type="text" class="form-control" id="ethnicity"placeholder="Ethnicity">
+  </div>
+  <div class="form-group">
+    <label>Gender</label>
+    <input type="text" class="form-control" id="gender"placeholder="Gender">
+  </div>
+  <div class="form-group">
+    <label>Veteran Status</label>
+    <input type="text" class="form-control" id="status"placeholder="Veteran Status">
+  </div>
+
+  <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+</body>
+</html>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
+  import { getDatabase, set, ref ,push, child, onValue} from "https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js";
+
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBX36S-WMY5vioCt_7dNiFxF7iiwY_TgXs",
+    authDomain: "temp-81b88.firebaseapp.com",
+    databaseURL: "https://temp-81b88-default-rtdb.firebaseio.com",
+    projectId: "temp-81b88",
+    storageBucket: "temp-81b88.appspot.com",
+    messagingSenderId: "899494313913",
+    appId: "1:899494313913:web:402b9e84eb834f0bff0068",
+    measurementId: "G-83S3R01M11"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  // Get a reference to the database service
+  const database = getDatabase(app);
+
+  // write data
+  submit.addEventListener('click',(e) => {
+    var name = document.getElementById('name').value;
+    var phone = document.getElementById('phone').value;
+    var email = document.getElementById('email').value;
+    var education = document.getElementById('education').value;
+    var experience = document.getElementById('experience').value;
+    var skills = document.getElementById('skills').value;
+    var ethnicity = document.getElementById('ethnicity').value;
+    var gender = document.getElementById('gender').value;
+    var status = document.getElementById('status').value;
+
+    var appStatus = "Pending";
+
+    const userId = push(child(ref(database), 'demo')).key;
+
+    set(ref(database, 'demo/' + userId), {
+    name: name,
+    phone: phone,
+    education: education,
+    experience: experience,
+    skills: skills,
+    ethnicity: ethnicity,
+    gender: gender,
+    status: status,
+    appStatus: appStatus,
+    email : email
+   });
+   alert('saved');
+  });
+
+  // read data
+  getData.addEventListener('click',(e) => {
+
+    $('#dataTbl td').remove();
+    var rowNum = 0;
+    const dbRef = ref(database, 'demo/');
+
+    onValue(dbRef, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+      const childKey = childSnapshot.key;
+      const childData = childSnapshot.val();
+      // ...
+      rowNum += 1;
+      var row = "<tr><td>" + rowNum + "</td><td>" + childData.name + "</td><td>" + childData.phone + "</td><td>"
+      + childData.education + "</td><td>" + childData.experience + "</td><td>" + childData.skills + "</td><td>" + childData.ethnicity + "</td><td>" + childData.gender + "</td><td>" +
+      childData.status + "</td><td>" + childData.appStatus + "</td><td>" + childData.email + "</td></tr>"
+
+      $(row).appendTo('#dataTbl');
+
+      });
+    }, {
+       onlyOnce: true
+    });
+
+
+  });
+</script>
