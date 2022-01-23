@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>firebase editable table </title>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+  <button type="submit" id="getData" class="btn btn-primary">Get Email</button>
+
+<div class="col-md-6">
+  <form>
+    <div class="form-group">
+    <label>Applicant Number</label>
+    <input type="text" class="form-control" id="number" placeholder="Applicant Number">
+  </div>
+  <div class="form-group">
+</div> 
+</form>
+</div>
+<form action="https://getform.io/f/86ea4356-6546-4318-b888-7db6a4cc076a" method="POST">
+  <label>Email Address:</label>
+<input type="email" name="email">
+<!-- radio button handle -->
+<label>Accepted</label>
+<input type="radio" name="status" value="rejected" checked>
+<label>Rejected</label>
+<input type="radio" name="status" value="accepted">
+<button type="submit">Send</button>
+</form>
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+<script type="module">
+  var appnumber = 0;
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
+  import { getDatabase, set, ref ,push, child, onValue} from "https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js";
+
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBX36S-WMY5vioCt_7dNiFxF7iiwY_TgXs",
+    authDomain: "temp-81b88.firebaseapp.com",
+    databaseURL: "https://temp-81b88-default-rtdb.firebaseio.com",
+    projectId: "temp-81b88",
+    storageBucket: "temp-81b88.appspot.com",
+    messagingSenderId: "899494313913",
+    appId: "1:899494313913:web:402b9e84eb834f0bff0068",
+    measurementId: "G-83S3R01M11"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  // Get a reference to the database service
+  const database = getDatabase(app);
+
+  function getID() {
+    appnumber = document.getElementById('number').value;
+  }
+
+  // read data
+  getData.addEventListener('click',(e) => {
+    getID();
+    $('#dataTbl td').remove();
+    var rowNum = 0;
+    var applicantEmail = "";
+    const dbRef = ref(database, 'recruit_test/');
+    onValue(dbRef, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+      const childKey = childSnapshot.key;
+      const childData = childSnapshot.val();
+      // ...
+      if (rowNum == (appnumber - 1)) {
+        applicantEmail = (childData.email);
+        window.alert(applicantEmail);
+      }
+      rowNum += 1;
+
+
+      });
+    }, {
+       onlyOnce: true
+    });
+
+
+  });
+  </script>
